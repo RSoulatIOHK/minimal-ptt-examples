@@ -150,6 +150,8 @@ instance ContractModel VestingModel where
       amount = s ^. contractState . vestedAmount
       newAmount = amount Numeric.- v
 
+  validFailingAction s a = False
+
   arbitraryAction s = frequency [ (1, Vest <$> genWallet)
                                 , (1, Retrieve <$> genWallet
                                                <*> (Ada.lovelaceValueOf
