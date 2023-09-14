@@ -19,7 +19,8 @@ module Spec.Vesting (VestingModel
                     , prop_CheckNoLockedFundsProof
                     , retrieveFundsTrace
                     , certification
-                    , check_propVestingWithCoverage) where
+                    , check_propVestingWithCoverage
+                    , prop_doubleSatisfaction) where
 
 import Control.Lens hiding (elements)
 import Control.Monad (void, when)
@@ -28,12 +29,13 @@ import Test.Tasty
 import Test.Tasty.HUnit qualified as HUnit
 import Test.Tasty.QuickCheck (testProperty)
 
-import Cardano.Node.Emulator.TimeSlot qualified as TimeSlot
+import Cardano.Node.Emulator.Internal.Node.TimeSlot qualified as TimeSlot
 import Ledger qualified
 import Ledger.Slot
 import Ledger.Time (POSIXTime)
 import Plutus.Contract.Test hiding (not)
 import Plutus.Contract.Test.ContractModel
+import Plutus.Contract.Test.ContractModel.CrashTolerance
 import Contract.Vesting
 import Plutus.Script.Utils.Ada qualified as Ada
 import Plutus.Script.Utils.Value
@@ -44,7 +46,10 @@ import PlutusTx.Numeric qualified as Numeric
 import Prelude
 import Test.QuickCheck hiding ((.&&.))
 import Plutus.Contract.Test.Certification
-import Plutus.Contract.Test.ContractModel.CrashTolerance
+-- import GHC.Generics
+
+
+
 
 -- | The scenario used in the property tests. It sets up a vesting scheme for a
 --   total of 60 ada over 20 blocks (20 ada can be taken out before
@@ -149,8 +154,6 @@ instance ContractModel VestingModel where
       slot   = s ^. currentSlot
       amount = s ^. contractState . vestedAmount
       newAmount = amount Numeric.- v
-
-  validFailingAction s a = False
 
   arbitraryAction s = frequency [ (1, Vest <$> genWallet)
                                 , (1, Retrieve <$> genWallet
@@ -281,8 +284,8 @@ modelTests =
     ]
 
 -- TODO: re-activate when double satisfaction is turned on again
--- prop_doubleSatisfaction :: Actions VestingModel -> Property
--- prop_doubleSatisfaction = checkDoubleSatisfaction
+prop_doubleSatisfaction :: Actions VestingModel -> Property
+prop_doubleSatisfaction = checkDoubleSatisfaction
 
 retrieveFundsTrace :: EmulatorTrace ()
 retrieveFundsTrace = do

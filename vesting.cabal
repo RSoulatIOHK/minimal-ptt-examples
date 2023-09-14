@@ -61,6 +61,7 @@ library
       cardano-node-emulator          >=1.1.0
     , plutus-contract                >=1.1.0
     , plutus-contract-certification  >=1.1.0
+    , plutus-contract-model          >=1.2.0
     , plutus-ledger                  >=1.1.0
     , plutus-script-utils            >=1.1.0
     , plutus-tx-constraints          >=1.1.0
@@ -121,6 +122,7 @@ test-suite vesting-test
     , freer-extras                   >=1.1.0
     , plutus-contract                >=1.1.0
     , plutus-contract-certification  >=1.1.0
+    , plutus-contract-model          >=1.2.0
     , plutus-ledger                  >=1.1.0
     , plutus-script-utils            >=1.1.0
     , plutus-tx-constraints          >=1.1.0
