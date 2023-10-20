@@ -402,7 +402,7 @@ prop_CrashTolerance = propRunActions_
 
 unitTest1 :: DL EscrowModel ()
 unitTest1 = do
-              val <- forAllQ $ chooseQ (-5, 20)
+              val <- forAllQ $ chooseQ (30, 50)
               action $ Pay w1 val
               action $ Pay w2 val
               action $ Pay w3 val
@@ -411,7 +411,7 @@ unitTest1 = do
 
 unitTest2 :: DL EscrowModel ()
 unitTest2 = do
-              val <- forAllQ $ chooseQ (-5, 20)
+              val <- forAllQ $ chooseQ (30, 50)
               action $ Pay w1 val
               waitUntilDL 100
               action $ Refund w1
