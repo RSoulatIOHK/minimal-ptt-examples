@@ -254,7 +254,7 @@ tests = testGroup "escrow"
         )
         $ do
           hdl <- Trace.activateContractWallet w1 con
-          Trace.callEndpoint @"pay-escrow" hdl (Ada.adaValueOf 10)
+          Trace.callEndpoint @"pay-escrow" hdl (Ada.adaValueOf 20)
           void $ Trace.waitNSlots 1
 
     , let con = void $ selectEither (payEp @()
@@ -265,7 +265,7 @@ tests = testGroup "escrow"
       checkPredicateOptions options "can redeem"
         ( assertDone con (Trace.walletInstanceTag w3) (const True) "escrow redeem not done"
           .&&. walletFundsChange w1 (Value.adaValueOf (-10))
-          .&&. walletFundsChange w2 (Value.adaValueOf 10)
+          .&&. walletFundsChange w2 (Value.adaValueOf 20)
           .&&. walletFundsChange w3 mempty
         )
         redeemTrace
@@ -291,7 +291,7 @@ tests = testGroup "escrow"
             .&&. walletFundsChange w2 (Value.adaValueOf 10)
 
           -- Wallet 3 pays 10 and doesn't receive anything.
-            .&&. walletFundsChange w3 (Value.adaValueOf (-10))
+            .&&. walletFundsChange w3 (Value.adaValueOf (-20))
           )
           redeem2Trace
 
